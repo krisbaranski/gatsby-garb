@@ -1,7 +1,7 @@
-import React from "react"
-import { graphql, StaticQuery, Link } from "gatsby"
+import React from 'react'
+import { graphql, StaticQuery, Link } from 'gatsby'
 
-import Layout from "../../components/layout"
+import Layout from '../components/layout'
 
 const getImageData = graphql`
   {
