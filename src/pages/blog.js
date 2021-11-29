@@ -38,14 +38,14 @@ export default () => (
             {data.allMarkdownRemark.edges.map(({ node }) => (
               <div key={node.id}>
                 <h3>
-                  <Link to={`posts${node.fields.slug}`}>
+                  <Link to={`/posts${node.fields.slug}`}>
                     {node.frontmatter.title}
-                  </Link>
+                  </Link>{' '}
                   <span style={{ color: '#bbb' }}>
                     - {node.frontmatter.date}
                   </span>
                 </h3>
-                <p>{node.excerpt}</p>
+                <p>{node.exerpts}</p>
               </div>
             ))}
           </>

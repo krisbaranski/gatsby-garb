@@ -2,6 +2,7 @@ const path = require('path')
 const { createFilePath } = require('gatsby-source-filesystem')
 
 const PostTemplate = path.resolve('./src/templates/post-template.js')
+const BlogTemplate = path.resolve('./src/templates/blog-template.js')
 
 exports.onCreateNode = ({ node, getNode, actions }) => {
   const { createNodeField } = actions
@@ -32,6 +33,7 @@ exports.createPages = async ({ graphql, actions }) => {
   `)
 
   const posts = result.data.allMarkdownRemark.edges
+
   posts.forEach(({ node: post }) => {
     createPage({
       path: `posts${post.fields.slug}`,
@@ -41,14 +43,25 @@ exports.createPages = async ({ graphql, actions }) => {
       },
     })
   })
-}
 
-// exports.createPages = async ({ actions }) => {
-//   const { createPage } = actions
-//   createPage({
-//     path: '/using-dsg',
-//     component: require.resolve('./src/templates/using-dsg.js'),
-//     context: {},
-//     defer: true,
-//   })
-// }
+  posts.forEach((_, index, postArr) => {
+    const totalPages = postArr.length
+    const postsPerPage = 1
+    const currentPage = index + 1
+    const isFirstPage = index === 0
+    const isLastPage = currentPage === totalPages
+
+    createPage({
+      path: isFirstPage ? '/blog' : `/blog/${currentPage}`,
+      component: BlogTemplate,
+      context: {
+        limit: postsPerPage,
+        skip: index * postsPerPage,
+        isFirstPage,
+        isLastPage,
+        currentPage,
+        totalPages,
+      },
+    })
+  })
+}
