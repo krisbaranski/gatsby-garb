@@ -19,10 +19,10 @@ export default ({ data, pageContext }) => {
         {data.allMarkdownRemark.edges.map(({ node }) => (
           <div key={node.id}>
             <h3>
-              <Link to={`posts${node.fields.slug}`}>
+              <Link to={`/posts${node.fields.slug}`}>
                 {node.frontmatter.title}
               </Link>
-              <span style={{ color: '#bbb' }}>- {node.frontmatter.date}</span>
+              <span style={{ color: '#bbb' }}> - {node.frontmatter.date}</span>
             </h3>
             <p>{node.excerpt}</p>
           </div>
@@ -34,7 +34,7 @@ export default ({ data, pageContext }) => {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            maxWidth: 400,
+            maxWidth: 300,
             margin: '0 auto',
           }}
         >
@@ -55,13 +55,21 @@ export default ({ data, pageContext }) => {
           )}
         </div>
       </div>
+
+      <br />
+      <Link to="/">Go to Homepage</Link>
+      <br />
     </Layout>
   )
 }
 
 export const query = graphql`
   query ($skip: Int!, $limit: Int!) {
-    allMarkdownRemark(skip: $skip, limit: $limit) {
+    allMarkdownRemark(
+      skip: $skip
+      limit: $limit
+      sort: { fields: [frontmatter___date], order: DESC }
+    ) {
       totalCount
       edges {
         node {
@@ -71,9 +79,9 @@ export const query = graphql`
           id
           frontmatter {
             title
-            date
+            date(formatString: "dddd, MMM, Do, YYYY", locale: "us")
           }
-          excerpt
+          excerpt(pruneLength: 25, format: PLAIN)
         }
       }
     }
